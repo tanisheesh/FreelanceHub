@@ -3,7 +3,7 @@ services:
     name: freelancehub
     env: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "python check_and_fix_db.py && gunicorn --bind 0.0.0.0:$PORT wsgi:app"
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT wsgi:app"
     envVars:
       - key: FLASK_ENV
         value: production
@@ -12,7 +12,7 @@ services:
       - key: DATABASE_URL
         value: sqlite:///freelance_hub.db
       - key: ADMIN_EMAIL
-        value: admin@freelancehub.com
+        value: tanishpoddar.18@gmail.com
       - key: SITE_NAME
         value: FreelanceHub
       - key: SITE_URL
