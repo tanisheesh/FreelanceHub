@@ -1,53 +1,154 @@
 {% extends "base.html" %}
 
-{% block title %}Login - Freelance Portfolio{% endblock %}
+{% block title %}Login - {{ config.SITE_NAME }}{% endblock %}
+{% block description %}Sign in to your FreelanceHub account to manage your portfolio and showcase your skills.{% endblock %}
 
 {% block content %}
-    <div class="max-w-md mx-auto mt-10">
-        <h2 class="text-center text-3xl font-extrabold text-gray-900">Sign In to Your Account</h2>
-        <p class="mt-2 text-center text-sm text-gray-600">
-          Use your email or username to continue to Freelance Portfolio
-        </p>
-    
-        <form method="POST" class="mt-8 space-y-6">
-            {{ form.hidden_tag() }}
-            <div class="rounded-md shadow-sm -space-y-px">
-                <div>
-                    <label for="email" class="sr-only">Email or Username</label>
-                    {{ form.email(id="email", autocomplete="username", class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm", placeholder="Email or Username") }}
-                
-                </div>
-                <div>
-                    <label for="password" class="sr-only">Password</label>
-                    {{ form.password(id="password", autocomplete="current-password", class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm", placeholder="Password") }}
-                </div>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-primary-600 to-primary-700 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">Welcome Back</h1>
+                <p class="text-xl text-primary-100 max-w-3xl mx-auto">
+                    Sign in to your account to manage your portfolio and connect with clients.
+                </p>
             </div>
-
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    {{ form.remember_me(id="remember_me") }}
-                    <label for="remember_me" class="ml-2 block text-sm text-gray-900">
-                        Remember me
-                    </label>
-                </div>
-
-                <div class="text-sm">
-                    <a href="{{ url_for('auth.reset_password_request') }}" class="font-medium text-primary-600 hover:text-primary-500">
-                        Forgot your password?
-                    </a>
-                </div>
-            </div>
-
-            <div>
-                {{ form.submit(class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500") }}
-            </div>
-        </form>
-    
-        <p class="mt-2 text-center text-sm text-gray-600">
-          Don't have an account?
-          <a href="{{ url_for('auth.register') }}" class="font-medium text-primary-600 hover:text-primary-500">
-            Create one here
-          </a>
-        </p>
+        </div>
     </div>
+
+    <!-- Login Content -->
+    <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- Demo Credentials -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-blue-800">Demo Account</h3>
+                    <div class="mt-2 text-sm text-blue-700">
+                        <p class="mb-2">Try the admin dashboard with these credentials:</p>
+                        <div class="bg-white rounded p-3 font-mono text-xs">
+                            <div class="mb-1"><strong>Email:</strong> admin@freelancehub.com</div>
+                            <div><strong>Password:</strong> admin123</div>
+                        </div>
+                        <p class="mt-2 text-xs">Access admin features, manage portfolios, and view analytics.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 text-center mb-6">Sign In</h2>
+            
+            <form method="POST" novalidate>
+                {{ form.hidden_tag() }}
+                
+                <div class="space-y-6">
+                    <!-- Email/Username -->
+                    <div>
+                        {{ form.email.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+                        {{ form.email(class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200", placeholder="Enter your email or username") }}
+                        {% if form.email.errors %}
+                            <div class="mt-2">
+                                {% for error in form.email.errors %}
+                                    <p class="text-sm text-red-600">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        {{ form.password.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+                        {{ form.password(class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200", placeholder="Enter your password") }}
+                        {% if form.password.errors %}
+                            <div class="mt-2">
+                                {% for error in form.password.errors %}
+                                    <p class="text-sm text-red-600">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            {{ form.remember_me(class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded") }}
+                            {{ form.remember_me.label(class="ml-2 block text-sm text-gray-700") }}
+                        </div>
+                        <div class="text-sm">
+                            <a href="{{ url_for('auth.reset_password_request') }}" 
+                               class="font-medium text-primary-600 hover:text-primary-500">
+                                Forgot password?
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        {{ form.submit(class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2") }}
+                    </div>
+                </div>
+            </form>
+
+            <!-- Register Link -->
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Don't have an account?
+                    <a href="{{ url_for('auth.register') }}" 
+                       class="font-medium text-primary-600 hover:text-primary-500">
+                        Create one here
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Quick Demo Actions -->
+        <div class="mt-8 text-center">
+            <p class="text-sm text-gray-500 mb-4">Or explore without signing in:</p>
+            <div class="space-x-4">
+                <a href="{{ url_for('main.browse') }}" 
+                   class="text-primary-600 hover:text-primary-700 font-medium text-sm">
+                    Browse Portfolios
+                </a>
+                <span class="text-gray-300">•</span>
+                <a href="{{ url_for('auth.register') }}" 
+                   class="text-primary-600 hover:text-primary-700 font-medium text-sm">
+                    Create Account
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-fill demo credentials when clicking on the demo box
+document.addEventListener('DOMContentLoaded', function() {
+    const demoBox = document.querySelector('.bg-blue-50');
+    const emailInput = document.querySelector('input[name="email"]');
+    const passwordInput = document.querySelector('input[name="password"]');
+    
+    if (demoBox && emailInput && passwordInput) {
+        demoBox.style.cursor = 'pointer';
+        demoBox.addEventListener('click', function() {
+            emailInput.value = 'admin@freelancehub.com';
+            passwordInput.value = 'admin123';
+            emailInput.focus();
+        });
+        
+        // Add hover effect
+        demoBox.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#dbeafe';
+        });
+        demoBox.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '#eff6ff';
+        });
+    }
+});
+</script>
 {% endblock %}
