@@ -116,24 +116,35 @@
                     <div class="space-y-4">
                         <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                             <div>
-                                <h3 class="font-medium text-gray-900">Change Password</h3>
-                                <p class="text-sm text-gray-600">Update your account password</p>
+                                <h3 class="font-medium text-gray-900">Edit Profile</h3>
+                                <p class="text-sm text-gray-600">Update your personal information</p>
                             </div>
-                            <a href="{{ url_for('auth.reset_password_request') }}" 
+                            <a href="{{ url_for('auth.edit_profile') }}" 
                                class="text-primary-600 hover:text-primary-700 font-medium">
-                                Reset Password
+                                Edit Profile
                             </a>
                         </div>
                         
                         <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                             <div>
-                                <h3 class="font-medium text-gray-900">Delete Account</h3>
-                                <p class="text-sm text-gray-600">Permanently delete your account and all data</p>
+                                <h3 class="font-medium text-gray-900">Change Password</h3>
+                                <p class="text-sm text-gray-600">Update your account password</p>
                             </div>
-                            <button onclick="confirmDeleteAccount()" 
-                                    class="text-red-600 hover:text-red-700 font-medium">
+                            <a href="{{ url_for('auth.change_password') }}" 
+                               class="text-primary-600 hover:text-primary-700 font-medium">
+                                Change Password
+                            </a>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 border border-red-200 rounded-lg bg-red-50">
+                            <div>
+                                <h3 class="font-medium text-red-900">Delete Account</h3>
+                                <p class="text-sm text-red-600">Permanently delete your account and all data</p>
+                            </div>
+                            <a href="{{ url_for('auth.delete_account') }}" 
+                               class="text-red-600 hover:text-red-700 font-medium">
                                 Delete Account
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -194,12 +205,5 @@
     </div>
 </div>
 
-<script>
-function confirmDeleteAccount() {
-    if (confirm('Are you sure you want to delete your account? This action cannot be undone and will permanently remove all your data.')) {
-        // Redirect to account deletion page or show deletion form
-        alert('Account deletion feature is not yet implemented. Please contact support for assistance.');
-    }
-}
-</script>
+
 {% endblock %} 

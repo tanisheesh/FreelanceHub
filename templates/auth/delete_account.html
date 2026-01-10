@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Account - {{ config.SITE_NAME }}{% endblock %}
+{% block description %}Permanently delete your account and all associated data.{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-red-600 to-red-700 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">Delete Account</h1>
+                <p class="text-xl text-red-100 max-w-3xl mx-auto">
+                    This action cannot be undone. Please proceed with caution.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Content -->
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <!-- Warning Notice -->
+            <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-medium text-red-800 mb-2">Warning: This action is permanent</h3>
+                        <div class="text-sm text-red-700">
+                            <p class="mb-3">Deleting your account will permanently remove:</p>
+                            <ul class="list-disc list-inside space-y-1 mb-3">
+                                <li>Your user profile and account information</li>
+                                <li>Your portfolio and all projects</li>
+                                <li>All uploaded images and files</li>
+                                <li>Your skills, testimonials, and other data</li>
+                                <li>All analytics and view history</li>
+                                <li>Any inquiries received through your portfolio</li>
+                            </ul>
+                            <p class="font-medium">This data cannot be recovered once deleted.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Summary -->
+            <div class="bg-gray-50 rounded-lg p-6 mb-8">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Account Summary</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <span class="text-gray-600">Name:</span>
+                        <span class="ml-2 font-medium">{{ current_user.first_name }} {{ current_user.last_name }}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-600">Username:</span>
+                        <span class="ml-2 font-medium">{{ current_user.username }}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-600">Email:</span>
+                        <span class="ml-2 font-medium">{{ current_user.email }}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-600">Member since:</span>
+                        <span class="ml-2 font-medium">{{ current_user.created_at.strftime('%B %d, %Y') }}</span>
+                    </div>
+                    {% if current_user.portfolio %}
+                    <div>
+                        <span class="text-gray-600">Portfolio views:</span>
+                        <span class="ml-2 font-medium">{{ current_user.portfolio.view_count or 0 }}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-600">Projects:</span>
+                        <span class="ml-2 font-medium">{{ current_user.portfolio.projects.count() }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Alternatives -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+                <h3 class="text-lg font-medium text-blue-800 mb-2">Consider these alternatives</h3>
+                <div class="text-sm text-blue-700 space-y-2">
+                    <p>• <strong>Make your portfolio private</strong> - Hide it from public view without deleting</p>
+                    <p>• <strong>Take a break</strong> - Simply stop using the platform and return later</p>
+                    <p>• <strong>Contact support</strong> - We're here to help with any issues you're experiencing</p>
+                </div>
+                <div class="mt-4 space-x-4">
+                    {% if current_user.portfolio %}
+                    <a href="{{ url_for('portfolio.editor') }}" 
+                       class="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                        Edit Portfolio Settings
+                    </a>
+                    {% endif %}
+                    <a href="{{ url_for('contact') }}" 
+                       class="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+
+            <!-- Deletion Form -->
+            <form method="POST" novalidate id="deleteForm">
+                {{ form.hidden_tag() }}
+                
+                <div class="space-y-6">
+                    <!-- Password Confirmation -->
+                    <div>
+                        {{ form.password.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+                        {{ form.password(class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors duration-200", placeholder="Enter your password to confirm") }}
+                        {% if form.password.errors %}
+                            <div class="mt-2">
+                                {% for error in form.password.errors %}
+                                    <p class="text-sm text-red-600">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Confirmation Checkbox -->
+                    <div class="flex items-start">
+                        {{ form.confirm_delete(class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded mt-1") }}
+                        <div class="ml-3">
+                            {{ form.confirm_delete.label(class="text-sm text-gray-700") }}
+                            {% if form.confirm_delete.errors %}
+                                <div class="mt-1">
+                                    {% for error in form.confirm_delete.errors %}
+                                        <p class="text-sm text-red-600">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="flex items-center justify-between pt-6">
+                        <a href="{{ url_for('auth.profile') }}" 
+                           class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200">
+                            Cancel
+                        </a>
+                        <button type="button" onclick="confirmDeletion()" 
+                                class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                            Delete My Account
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDeletion() {
+    const password = document.querySelector('input[name="password"]').value;
+    const checkbox = document.querySelector('input[name="confirm_delete"]').checked;
+    
+    if (!password) {
+        alert('Please enter your password to confirm account deletion.');
+        return;
+    }
+    
+    if (!checkbox) {
+        alert('Please confirm that you understand this action cannot be undone.');
+        return;
+    }
+    
+    const confirmation = confirm(
+        'FINAL WARNING: This will permanently delete your account and all data. ' +
+        'This action cannot be undone. Are you absolutely sure you want to proceed?'
+    );
+    
+    if (confirmation) {
+        document.getElementById('deleteForm').submit();
+    }
+}
+</script>
+{% endblock %}

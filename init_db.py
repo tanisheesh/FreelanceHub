@@ -39,12 +39,15 @@ def init_database():
                 is_admin=True,
                 is_active=True
             )
-            admin.set_password('admin123')
+            # Use environment variable for admin password or default
+            admin_password = os.environ.get('ADMIN_PASSWORD', 'admin123')
+            admin.set_password(admin_password)
             db.session.add(admin)
             db.session.commit()
             print("✅ Admin user created successfully!")
             print(f"   Email: {admin_email}")
-            print(f"   Password: admin123")
+            print(f"   Password: {admin_password}")
+            print("   ⚠️  Please change this password after first login!")
         else:
             print("✅ Admin user already exists!")
         
