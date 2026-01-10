@@ -2,9 +2,7 @@ import os
 from datetime import datetime
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    if not SECRET_KEY:
-        raise ValueError("SECRET_KEY environment variable is required")
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///freelance_hub_dev.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
@@ -63,28 +61,22 @@ class ProductionConfig(Config):
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Strict'
     
-    # Database settings
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
-    if not SQLALCHEMY_DATABASE_URI:
-        raise ValueError("DATABASE_URL environment variable is required for production")
+    # Database settings - use default if not provided (for build time)
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///freelance_hub.db'
     
     # Mail settings
-    MAIL_SERVER = os.environ.get('MAIL_SERVER')
+    MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.gmail.com'
     MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true').lower() == 'true'
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER')
     
-    # Admin settings
-    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
-    if not ADMIN_EMAIL:
-        raise ValueError("ADMIN_EMAIL environment variable is required for production")
+    # Admin settings - use default if not provided (for build time)
+    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL') or 'admin@freelancehub.com'
     
-    # Site settings
-    SITE_URL = os.environ.get('SITE_URL')
-    if not SITE_URL:
-        raise ValueError("SITE_URL environment variable is required for production")
+    # Site settings - use default if not provided (for build time)
+    SITE_URL = os.environ.get('SITE_URL') or 'https://freelancehub.onrender.com'
 
 class TestingConfig(Config):
     TESTING = True
