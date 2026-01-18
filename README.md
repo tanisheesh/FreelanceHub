@@ -99,7 +99,7 @@ Visit **[FreelanceHub](https://freelancehub-564i.onrender.com/)** and explore al
 #### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/tanishpoddar/freelancehub.git
+git clone https://github.com/tanisheesh/freelancehub.git
 cd freelancehub
 
 # Create virtual environment
